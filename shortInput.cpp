@@ -5,6 +5,8 @@
 #include <vector>
 using namespace std;
 
+int n;
+
 //Connects to points on Graph with an edge
 void add_edge(vector<int>* adj, int src, int dest){
 
@@ -13,7 +15,7 @@ void add_edge(vector<int>* adj, int src, int dest){
 }
 
 bool isInside(int x, int y){
-    if (x >= 1 && x <= 8 && y >= 1 && y <= 8) {
+    if (x >= 1 && x <= n && y >= 1 && y <= n) {
         return true;
     }
     return false;
@@ -23,19 +25,19 @@ int corToK(int* cor){
     int i = cor[0];
     int j = cor[1];
 
-    int k = 8 * (i - 1) + j - 1;
+    int k = n * (i - 1) + j - 1;
 
     return k;
 }
 
 int kToCorX(int k){
-    int x = (k / 8) + 1;
+    int x = (k / n) + 1;
 
     return x;
 }
 
 int kToCorY(int k){
-    int y = (k % 8) + 1;
+    int y = (k % n) + 1;
 
     return y;
 }
@@ -63,16 +65,14 @@ bool isValidMove(vector<int>* adj, int srcX, int srcY){
 }
 
 void buildGraph(vector<int>* adj){
-    for (int i = 1; i < 9; ++i) {
-        for (int j = 1; j < 9; ++j) {
+    for (int i = 1; i < n+1; ++i) {
+        for (int j = 1; j < n+1; ++j) {
             isValidMove(adj, i, j);
         }
     }
 }
 
-// a modified version of BFS that stores predecessor
-// of each vertex in array p
-// and its distance from source in array d
+//Finds the shortest path to destination
 bool shortestPath(vector<int>* adj, int src, int dest, int v, int pred[]) {
 
     int dist[v];
@@ -159,13 +159,31 @@ void printPath(vector<int> adj[], int s,
 // Driver program to test above functions
 int main() {
     // Number of Vertices
-    int v = 64;
+    cout << "Enter a the size of board: \n";
+    cin >> n;
+
+    //Total number of vertices
+    int v = (n * n);
     int predecessor[v];
 
     // array of vectors is used to store the graph
     // in the form of an adjacency list
     vector<int> adj[v];
-    int srcCor[] = {3, 3}, targetCor[] = {3, 4};
+
+    int srcX, srcY, destX, destY;
+    cout << "\nInput the Source X cooridinate \n";
+    cin >> srcX;
+
+    cout << "\nInput the Source Y cooridinate\n";
+    cin >> srcY;
+
+    cout << "\n\nInput the Target X cooridinate\n";
+    cin >> destX;
+
+    cout << "\nInput the Target Y cooridinate\n";
+    cin >> destY;
+
+    int srcCor[] = {srcX, srcY}, targetCor[] = {destX, destY};
 
     //Build a graph with 64 vertices
     buildGraph(adj);
