@@ -41,9 +41,11 @@ int minStepToReachTarget(int knightPos[], int targetPos[],
     bool visit[N + 1][N + 1];
 
     // make all cell unvisited
-    for (int i = 1; i <= N; i++)
-        for (int j = 1; j <= N; j++)
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
             visit[i][j] = false;
+        }
+    }
 
     // visit starting state
     visit[knightPos[0]][knightPos[1]] = true;

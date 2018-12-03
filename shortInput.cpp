@@ -3,13 +3,13 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <climits>
 using namespace std;
 
 int n;
 
 //Connects to points on Graph with an edge
 void add_edge(vector<int>* adj, int src, int dest){
-
     adj[src].push_back(dest);
     adj[dest].push_back(src);
 }
@@ -59,7 +59,7 @@ bool isValidMove(vector<int>* adj, int srcX, int srcY){
             int destCor[] = {xVal, yVal}; // Turn Possible moves into a Cooridante
             int destK = corToK(destCor); //Turn possible moves into a K value
             add_edge(adj, srcK, destK);
-            cout << "New Edge: Src - " << srcK << " Dest - " << destK << "\n ";
+            //cout << "New Edge: Src - " << srcK << " Dest - " << destK << "\n ";
         }
     }
 }
@@ -134,8 +134,7 @@ void printPath(vector<int> adj[], int s,
     int pred[v];
 
     if (shortestPath(adj, s, dest, v, pred) == false) {
-        cout << "Given source and destination"
-             << " are not connected";
+        cout << "Given source and destination are not connected";
         return;
     }
 
@@ -148,9 +147,10 @@ void printPath(vector<int> adj[], int s,
         start = pred[start];
     }
     // Print the path of the shortest route
+    cout << "The size of the Path is: " << path.size();
     cout << "\nPath is:\n";
     for (int i = path.size() - 1; i >= 0; i--) {
-        cout << path[i];
+        //cout << path[i];
         cout << "(" << kToCorX(path[i]) << "," << kToCorY(path[i]) << ") ";
     }
 }
