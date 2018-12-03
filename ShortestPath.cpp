@@ -5,8 +5,7 @@
 #include <vector>
 using namespace std;
 
-// utility function to form edge between two vertices
-// source and dest
+//Connects to points on Graph with an edge
 void add_edge(vector<int>* adj, int src, int dest){
 
     adj[src].push_back(dest);
@@ -30,13 +29,13 @@ int corToK(int* cor){
 }
 
 int kToCorX(int k){
-    int x = (k / 3) + 1;
+    int x = (k / 8) + 1;
 
     return x;
 }
 
 int kToCorY(int k){
-    int y = (k % 3) + 1;
+    int y = (k % 8) + 1;
 
     return y;
 }
@@ -57,9 +56,8 @@ bool isValidMove(vector<int>* adj, int srcX, int srcY){
                 int srcK = corToK(srcCor); // Turn cooridinate into K value
                 int destCor[] = {xVal, yVal}; // Turn Possible moves into a Cooridante
                 int destK = corToK(destCor); //Turn possible moves into a K value
-                add_edge(adj, srcK, destK);
-                cout << "New Edge: Src - " << srcK << " Dest - " << destK << "\n ";
-
+                    add_edge(adj, srcK, destK);
+                    cout << "New Edge: Src - " << srcK << " Dest - " << destK << "\n ";
             }
         }
     }
@@ -75,9 +73,9 @@ void buildGraph(vector<int>* adj){
 // a modified version of BFS that stores predecessor
 // of each vertex in array p
 // and its distance from source in array d
-bool shortestPath(vector<int>* adj, int src, int dest, int v,
-         int pred[], int dist[])
-{
+bool shortestPath(vector<int>* adj, int src, int dest, int v, int pred[]) {
+
+    int dist[v];
     // a queue to maintain queue of vertices whose
     // adjacency list is to be scanned as per normal
     // DFS algorithm
@@ -122,22 +120,20 @@ bool shortestPath(vector<int>* adj, int src, int dest, int v,
             }
         }
     }
-
     return false;
 }
-/*
+
 // utility function to print the shortest distance
 // between source vertex and destination vertex
-void printShortestDistance(vector<int> adj[], int s,
+void printPath(vector<int> adj[], int s,
                            int dest, int v)
 {
     // predecessor[i] array stores predecessor of
     // i and distance array stores distance of i
     // from s
-    int pred[v], dist[v];
+    int pred[v];
 
-    if (shortestPath(adj, s, dest, v, pred) == false)
-    {
+    if (shortestPath(adj, s, dest, v, pred) == false) {
         cout << "Given source and destination"
              << " are not connected";
         return;
@@ -145,34 +141,32 @@ void printShortestDistance(vector<int> adj[], int s,
 
     // vector path stores the shortest path
     vector<int> path;
-    int crawl = dest;
-    path.push_back(crawl);
-    while (pred[crawl] != -1) {
-        path.push_back(pred[crawl]);
-        crawl = pred[crawl];
+    int start = dest;
+    path.push_back(start);
+    while (pred[start] != -1) {
+        path.push_back(pred[start]);
+        start = pred[start];
     }
-
-    // distance from source is in distance array
-    cout << "Shortest path length is : "
-         << dist[dest];
-
-    // printing path from source to destination
-    cout << "\nPath is::\n";
-    for (int i = path.size() - 1; i >= 0; i--)
-        cout << path[i] << " ";
+    // Print the path of the shortest route
+    cout << "\nPath is:\n";
+    for (int i = path.size() - 1; i >= 0; i--) {
+        cout << path[i];
+        cout << "(" << kToCorX(path[i]) << "," << kToCorY(path[i]) << ") ";
+    }
 }
-*/
+
 
 // Driver program to test above functions
 int main() {
     // Number of Vertices
     int v = 64;
     int n = v * v;
+    int predecessor[v];
 
     // array of vectors is used to store the graph
     // in the form of an adjacency list
     vector<int> adj[v];
-    int srcCor[] = {2, 1}, targetCor[] = {2,2};
+    int srcCor[] = {3, 3}, targetCor[] = {3, 4};
 
     //Build a graph with 64 vertices
     buildGraph(adj);
@@ -184,6 +178,8 @@ int main() {
     // and destination vertex as argument and forms
     // an edge between them.
 
-    //printShortestDistance(adj, source, target, v);
+    shortestPath(adj, source, target, v, predecessor);
+
+    printPath(adj, source, target, v);
     return 0;
 }
