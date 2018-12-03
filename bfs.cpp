@@ -1,11 +1,14 @@
 // CPP code for printing shortest path between
 // two vertices of unweighted graph
-#include <bits/stdc++.h>
+#include <iostream>
+#include <list>
+#include <vector>
 using namespace std;
 
 // utility function to form edge between two vertices
 // source and dest
-void add_edge(vector<int> adj[], int src, int dest){
+void add_edge(vector<int>* adj, int src, int dest){
+
     adj[src].push_back(dest);
     adj[dest].push_back(src);
 }
@@ -17,54 +20,62 @@ bool isInside(int x, int y){
      return false;
 }
 
-int corToK(int cor[]){
+int corToK(int* cor){
     int i = cor[0];
     int j = cor[1];
 
-    int k = 8 * (i - 1) + j -1;
+    int k = 8 * (i - 1) + j - 1;
 
     return k;
 }
 
-int kToCor(int k){
+int kToCorX(int k){
     int x = (k / 3) + 1;
-    int y = (k % 3) + 1;
 
-    return x,y;
+    return x;
 }
 
+int kToCorY(int k){
+    int y = (k % 3) + 1;
 
-bool isValidMove(vector<int> adj[], int srcX, int srcY){
+    return y;
+}
+
+//Checks if the spaces are a valid move for the Knight, and adds an edge between the two
+bool isValidMove(vector<int>* adj, int srcX, int srcY){
+    //Possible Moves for Chess Piece
     int dx[] = {-2, -1, 1, 2, -2, -1, 1, 2};
     int dy[] = {-1, -2, -2, -1, 1, 2, 2, 1};
 
     //For each vertice
-        for (int i = 0; i < 8; i++){
-            int xVal = srcX + dx[i];
-            int yVal = srcY + dy[i];
-            if(isInside(xVal, yVal)){
-                int srcCor[] = {xVal, yVal};
-                int srcK = corToK(srcCor);
-                int destCor[] = {xVal, yVal};
-                int destK = corToK(destCor);
+        for (int i = 0; i < 8; i++){//Go through each possible move
+            int xVal = srcX + dx[i]; //Find possible x move
+            int yVal = srcY + dy[i]; //Find possible y move
+
+            if(isInside(xVal, yVal)){// Check if possible moves are inside the board
+                int srcCor[] = {srcX, srcY}; // Turn Src into a cooridinate
+                int srcK = corToK(srcCor); // Turn cooridinate into K value
+                int destCor[] = {xVal, yVal}; // Turn Possible moves into a Cooridante
+                int destK = corToK(destCor); //Turn possible moves into a K value
                 add_edge(adj, srcK, destK);
                 cout << "New Edge: Src - " << srcK << " Dest - " << destK << "\n ";
+
             }
         }
     }
 
-void buildGraph(vector<int> adj[]){
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            isValidMove(adj, i, j);
+void buildGraph(vector<int>* adj){
+        for (int i = 1; i < 9; ++i) {
+            for (int j = 1; j < 9; ++j) {
+                isValidMove(adj, i, j);
+            }
         }
     }
-}
 
 // a modified version of BFS that stores predecessor
 // of each vertex in array p
 // and its distance from source in array d
-bool BFS(vector<int> adj[], int src, int dest, int v,
+bool shortestPath(vector<int>* adj, int src, int dest, int v,
          int pred[], int dist[])
 {
     // a queue to maintain queue of vertices whose
@@ -114,7 +125,7 @@ bool BFS(vector<int> adj[], int src, int dest, int v,
 
     return false;
 }
-
+/*
 // utility function to print the shortest distance
 // between source vertex and destination vertex
 void printShortestDistance(vector<int> adj[], int s,
@@ -125,7 +136,7 @@ void printShortestDistance(vector<int> adj[], int s,
     // from s
     int pred[v], dist[v];
 
-    if (BFS(adj, s, dest, v, pred, dist) == false)
+    if (shortestPath(adj, s, dest, v, pred) == false)
     {
         cout << "Given source and destination"
              << " are not connected";
@@ -150,18 +161,20 @@ void printShortestDistance(vector<int> adj[], int s,
     for (int i = path.size() - 1; i >= 0; i--)
         cout << path[i] << " ";
 }
+*/
 
 // Driver program to test above functions
-int main()
-{
+int main() {
     // Number of Vertices
     int v = 64;
+    int n = v * v;
 
     // array of vectors is used to store the graph
     // in the form of an adjacency list
     vector<int> adj[v];
     int srcCor[] = {2, 1}, targetCor[] = {2,2};
 
+    //Build a graph with 64 vertices
     buildGraph(adj);
 
     int source = corToK(srcCor);
@@ -171,6 +184,6 @@ int main()
     // and destination vertex as argument and forms
     // an edge between them.
 
-    printShortestDistance(adj, source, target, v);
+    //printShortestDistance(adj, source, target, v);
     return 0;
 }

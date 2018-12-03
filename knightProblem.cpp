@@ -1,4 +1,7 @@
+// C++ program to find minimum steps to reach to
+// specific cell in minimum moves by Knight
 #include <queue>
+#include <iostream>
 using namespace std;
 
 // structure for storing a cell's data
@@ -49,6 +52,7 @@ int minStepToReachTarget(int knightPos[], int targetPos[],
     while (!q.empty())
     {
         t = q.front();
+        cout << "(" << t.x << ", " << t.y << " Dis: " <<  t.dis<<") ->";
         q.pop();
 
         // if current cell is equal to target cell,
@@ -67,17 +71,57 @@ int minStepToReachTarget(int knightPos[], int targetPos[],
             if (isInside(x, y, N) && !visit[x][y]) {
                 visit[x][y] = true;
                 q.push(cell(x, y, t.dis + 1));
+                //cout << "(" << x << ", " << y << ") ->";
             }
         }
     }
 }
 
+/*int minStepsToTarget(int knightPos[], int targetPos[], int N){
+    //Ways the piece can move
+    int xAxis[] = {-2,-2,-1,-1, 1, 1, 2, 2};
+    int yAxis[] = {-1, 1,-2, 2,-2, 2,-1, 1};
+
+    //Create Queue for Knight moves
+    queue<square> queue1;
+
+    //Add starting position to queue
+    queue1.push(square(knightPos[0], knightPos[1], 0));
+
+    //Declare new instance of square struct
+    typedef struct square square1;
+    int x,y;
+    bool visit[N+1][N+1];
+
+    //Make all cells unvisited
+    for(int i = 1; i <= N; i++){
+        for(int j = 1; j <= N; j++) {
+            visit[i][j] = false;
+        }
+    }
+
+    //Visit Starting Square
+    while(!queue1.empty()){
+        //Set Square equal to front of q and remove it
+        square1 = queue1.front();
+        queue1.pop();
+
+        //Return distance if to target location if at target
+        if(square1.x == targetPos[0] && square1.y == targetPos[1]){
+            visit[x][y] = true;
+            queue1.push(cell(x, y, square1.dis + 1));
+        }
+
+    }
+}
+*/
+
 // Driver code to test above methods
 int main()
 {
-    int N = 30;
-    int knightPos[] = {1, 1};
-    int targetPos[] = {30, 30};
+    int N = 8;
+    int knightPos[] = {4, 5};
+    int targetPos[] = {1, 1};
     cout << minStepToReachTarget(knightPos, targetPos, N);
     return 0;
 }
